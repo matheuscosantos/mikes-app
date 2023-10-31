@@ -32,6 +32,9 @@ jobs:
       - name: Build Gradle Project
         run: ./gradlew build
 
+      - name: Authenticate with AWS ECR
+        run: aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin public.ecr.aws/f4l7j7c2
+
       - name: Build Docker Image
         run: docker build -t public.ecr.aws/f4l7j7c2/mikes-repository/mikes-app:latest .
 
