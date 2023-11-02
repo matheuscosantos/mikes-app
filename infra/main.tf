@@ -19,8 +19,12 @@ data "aws_secretsmanager_secret" "db_credentials" {
   name = "mikes/db/db_credentials"
 }
 
+data "aws_secretsmanager_secret_version" "db_credentials_current" {
+  secret_id = data.aws_secretsmanager_secret.db_credentials.id
+}
+
 locals {
-  db_credentials = jsondecode(data.aws_secretsmanager_secret.db_credentials.secret_string)
+  db_credentials = jsondecode(data.aws_secretsmanager_secret_version.db_credentials_current.secret_string)
 }
 
 resource "aws_ecs_task_definition" "mikes_app_task_definition" {
