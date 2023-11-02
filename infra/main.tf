@@ -52,6 +52,7 @@ resource "aws_ecs_service" "mikes_app_service" {
   name            = "${var.name}_service"
   cluster         = data.aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.mikes_app_task_definition.arn
+  desired_count = 1
 
   network_configuration {
     subnets = var.subnets
