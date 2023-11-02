@@ -49,10 +49,6 @@ data "aws_ecs_cluster" "ecs_cluster" {
   cluster_name = "${var.name}_cluster"
 }
 
-data "aws_ecs_capacity_provider" "ec2_capacity_provider" {
-  name = "${var.name}_capacity_provider"
-}
-
 resource "aws_ecs_service" "mikes_app_service" {
   name            = "${var.name}_service"
   cluster         = data.aws_ecs_cluster.ecs_cluster.id
@@ -60,7 +56,7 @@ resource "aws_ecs_service" "mikes_app_service" {
   launch_type     = "EC2"
 
   capacity_provider_strategy {
-    capacity_provider = data.aws_ecs_capacity_provider.ec2_capacity_provider.name
+    capacity_provider = "${var.name}_capacity_provider"
     weight            = 1
     base              = 1
   }
