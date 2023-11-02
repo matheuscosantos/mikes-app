@@ -2,6 +2,7 @@
   {
     "name": "mikes-app-container",
     "image": "644237782704.dkr.ecr.us-east-2.amazonaws.com/mikes_app:latest",
+    "memory": 512,
     "portMappings": [
       {
         "containerPort": 8080,
