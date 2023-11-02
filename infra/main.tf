@@ -49,13 +49,23 @@ data "aws_ecs_cluster" "ecs_cluster" {
   cluster_name = "${var.name}_cluster"
 }
 
+data "aws_ecs_capacity_provider" "ec2_capacity_provider" {
+  name = "${var.name}_capacity_provider"
+}
+
 resource "aws_ecs_service" "mikes_app_service" {
   name            = "${var.name}_service"
   cluster         = data.aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.mikes_app_task_definition.arn
   launch_type     = "EC2"
 
+  capacity_provider_strategy {
+    capacity_provider = data.aws_ecs_capacity_provider.ec2_capacity_provider.name
+    weight            = 1
+    base              = 1
+  }
+
   network_configuration {
-    subnets = [var.subnets[0]] // use only a (cost)
+    subnets = var.subnets
   }
 }
