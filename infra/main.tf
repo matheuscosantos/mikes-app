@@ -37,7 +37,6 @@ resource "aws_ecs_task_definition" "mikes_app_task_definition" {
   container_definitions = templatefile("container/definitions/mikes_app_container_definitions.json", {
     DB_HOST     = data.aws_db_instance.db_instance.address
     DB_PORT     = data.aws_db_instance.db_instance.port
-    DB_NAME     = "mikes-db"
     DB_USER     = local.db_credentials["username"]
     DB_PASSWORD = local.db_credentials["password"]
   })
@@ -53,12 +52,6 @@ resource "aws_ecs_service" "mikes_app_service" {
   name            = "${var.name}_service"
   cluster         = data.aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.mikes_app_task_definition.arn
-
-  capacity_provider_strategy {
-    capacity_provider = "${var.name}_capacity_provider"
-    weight            = 1
-    base              = 1
-  }
 
   network_configuration {
     subnets = var.subnets
