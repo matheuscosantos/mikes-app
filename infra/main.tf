@@ -27,7 +27,7 @@ locals {
   db_credentials = jsondecode(data.aws_secretsmanager_secret_version.db_credentials_current.secret_string)
 }
 
-resource "aws_ecs_task_definition" "mikes_app_task_definition" {
+resource "aws_ecs_task_definition" "ecs_task_definition" {
   family                   = var.name
   network_mode             = "awsvpc"
   requires_compatibilities = ["EC2"]
@@ -48,10 +48,10 @@ data "aws_ecs_cluster" "ecs_cluster" {
   cluster_name = "${var.name}_cluster"
 }
 
-resource "aws_ecs_service" "mikes_app_service" {
+resource "aws_ecs_service" "ecs_service" {
   name            = "${var.name}_service"
   cluster         = data.aws_ecs_cluster.ecs_cluster.id
-  task_definition = aws_ecs_task_definition.mikes_app_task_definition.arn
+  task_definition = aws_ecs_task_definition.ecs_task_definition.arn
   desired_count = 1
 
   network_configuration {
