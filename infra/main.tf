@@ -56,15 +56,19 @@ resource "aws_ecs_service" "ecs_service" {
   task_definition = aws_ecs_task_definition.ecs_task_definition.arn
   desired_count = 1
 
-  force_new_deployment = true
-
-  triggers = {
-    redeployment = timestamp()
-  }
-
   network_configuration {
     subnets = var.subnets
     security_groups = [data.aws_security_group.security_group.id]
+  }
+
+  force_new_deployment = true
+
+  placement_constraints {
+    type = "distinctInstance"
+  }
+
+  triggers = {
+    redeployment = timestamp()
   }
 
   capacity_provider_strategy {
