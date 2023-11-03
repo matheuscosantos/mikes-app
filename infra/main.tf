@@ -48,6 +48,10 @@ data "aws_ecs_cluster" "ecs_cluster" {
   cluster_name = "${var.name}_cluster"
 }
 
+data "aws_security_group" "security_group" {
+  name  = "${var.name}_security_group"
+}
+
 resource "aws_ecs_service" "ecs_service" {
   name            = "${var.name}_service"
   cluster         = data.aws_ecs_cluster.ecs_cluster.id
@@ -56,6 +60,7 @@ resource "aws_ecs_service" "ecs_service" {
 
   network_configuration {
     subnets = var.subnets
+    security_groups = [data.aws_security_group.security_group.id]
   }
 
   capacity_provider_strategy {
