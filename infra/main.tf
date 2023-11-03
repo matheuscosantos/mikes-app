@@ -50,6 +50,10 @@ data "aws_security_group" "security_group" {
   name  = "${var.name}_security_group"
 }
 
+output "redeployment_timestamp" {
+  value = timestamp()
+}
+
 resource "aws_ecs_service" "ecs_service" {
   name            = "${var.name}_service"
   cluster         = data.aws_ecs_cluster.ecs_cluster.id
@@ -68,7 +72,7 @@ resource "aws_ecs_service" "ecs_service" {
   }
 
   triggers = {
-    redeployment = timestamp()
+    redeployment = redeployment_timestamp
   }
 
   capacity_provider_strategy {
