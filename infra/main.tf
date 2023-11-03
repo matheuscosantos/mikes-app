@@ -30,8 +30,6 @@ locals {
 resource "aws_ecs_task_definition" "ecs_task_definition" {
   family                   = var.name
   network_mode             = "awsvpc"
-  requires_compatibilities = ["EC2"]
-
   execution_role_arn = aws_iam_role.ecs_execution_role.arn
 
   container_definitions = templatefile("container/definitions/mikes_app_container_definitions.json", {
@@ -57,6 +55,12 @@ resource "aws_ecs_service" "ecs_service" {
   cluster         = data.aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.ecs_task_definition.arn
   desired_count = 1
+
+  force_new_deployment = true
+
+  triggers = {
+    redeployment = timestamp()
+  }
 
   network_configuration {
     subnets = var.subnets
