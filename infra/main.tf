@@ -57,4 +57,9 @@ resource "aws_ecs_service" "ecs_service" {
   network_configuration {
     subnets = var.subnets
   }
+
+  capacity_provider_strategy {
+    capacity_provider = "${var.name}_capacity_provider"
+    weight            = 100
+  }
 }
