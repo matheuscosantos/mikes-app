@@ -57,6 +57,10 @@ data "aws_security_group" "security_group" {
   name  = "${var.name}_security_group"
 }
 
+data "aws_lb_target_group" "lb_target_group" {
+  name = "${var.name}-lb-target-group"
+}
+
 resource "aws_ecs_service" "ecs_service" {
   name            = "${var.name}_service"
   cluster         = data.aws_ecs_cluster.ecs_cluster.id
@@ -66,6 +70,12 @@ resource "aws_ecs_service" "ecs_service" {
   network_configuration {
     subnets = var.subnets
     security_groups = [data.aws_security_group.security_group.id]
+  }
+
+  load_balancer {
+    target_group_arn = data.aws_lb_target_group.lb_target_group.arn
+    container_name   = "mikes-app-container"
+    container_port   = 8080
   }
 
   force_new_deployment = true
