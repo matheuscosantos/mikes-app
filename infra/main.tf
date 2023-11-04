@@ -41,6 +41,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
   container_definitions = templatefile("container/definitions/mikes_app_container_definitions.json", {
     DB_HOST     = data.aws_db_instance.db_instance.address
     DB_PORT     = data.aws_db_instance.db_instance.port
+    DB_NAME     = data.aws_db_instance.db_instance.db_name
     DB_USER     = local.db_credentials["username"]
     DB_PASSWORD = local.db_credentials["password"]
   })
