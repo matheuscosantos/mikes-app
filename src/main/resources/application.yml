@@ -12,3 +12,9 @@ spring:
   sql:
     init:
       platform: postgres
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
