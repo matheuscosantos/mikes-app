@@ -61,7 +61,7 @@ resource "aws_ecs_service" "ecs_service" {
   name            = "${var.name}_service"
   cluster         = data.aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.ecs_task_definition.arn
-  desired_count = 1
+  desired_count = 2
 
   network_configuration {
     subnets = var.subnets
@@ -79,5 +79,3 @@ resource "aws_ecs_service" "ecs_service" {
     weight            = 100
   }
 }
-
-// EC2InstanceProfileForImageBuilderECRContainerBuilds
