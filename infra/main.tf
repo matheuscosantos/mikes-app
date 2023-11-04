@@ -9,6 +9,12 @@ resource "aws_iam_role" "ecs_execution_role" {
   assume_role_policy = file("iam/role/ecs_execution_role.json")
 }
 
+resource "aws_iam_policy_attachment" "ecs_execution_role_ecr_policy_attachment" {
+  name       = "${var.name}_ecs_execution_role_ecr_policy_attachment"
+  roles      = [aws_iam_role.ecs_execution_role.name]
+  policy_arn = "arn:aws:iam::aws:policy/EC2InstanceProfileForImageBuilderECRContainerBuilds"
+}
+
 # -- task definition
 
 data "aws_db_instance" "db_instance" {
@@ -73,3 +79,4 @@ resource "aws_ecs_service" "ecs_service" {
   }
 }
 
+// EC2InstanceProfileForImageBuilderECRContainerBuilds
